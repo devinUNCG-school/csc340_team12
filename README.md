@@ -11,10 +11,10 @@
 
 ## App Functions
 1. Customer (the user with the customer role):
-    1. Create/modify customer profile - <how will your app do this?>
-    2. View available services - <how will your app do this?>.
-    3. Subscribe to available services - <how will your app do this?>.
-    4. Write reviews for subscribed services - <how will your app do this?>.
+    1. Create/modify customer profile - Register as a customer and find which mechanic can meet their vehicle's needs.
+    2. View available services - Browse the app to look for the specialist that meets their needs (oil change, bodywork, paint job, etc.)and view their certification and specializations.
+    3. Subscribe to available services - Book a recurring checkup or just a one-time service.
+    4. Write reviews for subscribed services - Leave reviews on how well the mechanic did on their vehicle and if they would recommend them.
 2. Provider (the user with the provider role):
     1. Create/modify/remove provider profile - .
     2. Create services - .
