@@ -16,7 +16,7 @@
     3. Subscribe to available services - Book a recurring checkup or just a one-time service.
     4. Write reviews for subscribed services - Leave reviews on how well the mechanic did on their vehicle and if they would recommend them.
 2. Provider (the user with the provider role):
-    1. Create/modify/remove provider profile - Register as provider is able to show professions and add or remove there profile.
+    1. Create/modify/remove provider profile - Registering as a provider can show professions and add or remove their profile.
     2. Create services - Publish offerings and provide availability for customers.
-    3. View customer statistics - Vehicle history, recents events, and common problems.
-    4. Reply to reviews - Monitor success rate, recent customers, compatability with others.
+    3. View customer statistics - Vehicle history, recent events, and common problems.
+    4. Reply to reviews - Monitor success rate, recent customers, compatibility with others.
