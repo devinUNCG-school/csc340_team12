@@ -1,83 +1,41 @@
-Project Name: Devin Hawkins
-Team: Names and roles
-Course: CSC 340
-Version: 1.0
-Date: 2026-08-25
+# Requirements – AutoAid
 
-1. Overview
-Vision. One or two sentences: who this is for, the core problem, and the outcome.
+**Project Name:** AutoAid \
+**Team:** Devin Hawkins - Provider, Za'kwon Hall - Customer \
+**Course:** CSC 340\
+**Version:** 1.0\
+**Date:** 2026-09-17
 
-Glossary Terms used in the project
+---
 
-Term 1: description.
-Term 2: description
-Primary Users / Roles.
+## 1. Overview
+**Vision.** AutoAid is a mobile app that delivers on-site mobile mechanics and detailing services to drivers whenever they need them. The system supports customers seeking on-site vehicle maintenance, repairs, or detailing services, as well as providers (mobile mechanics and detailers) who want to offer tailored automotive services.
 
-Customer (e.g., Student/Patient/Pet Owner/etc. ) — 1 line goal statement.
-Provider (e.g., Teacher/Doctor/Pet Sitter/etc. ) — 1 line goal statement.
-SysAdmin (optional) — 1 line goal statement.
-Scope (this semester).
+**Glossary:** Terms used in the project
+- **Provider:** A professional mobile mechanic or detailer who offers and performs automotive services.
+- **Customer:** A driver seeking on-site vehicle maintenance, repairs, or detailing services.
+- **Profile:** A collection of information about a user, including personal details and account type.
+- **Parts:** The replacement components or materials required to service a vehicle issue.
+- **Booking:** The scheduled arrangement connecting a customer's car issue request with a service provider.
 
-<capability 1>
-<capability 2>
-<capability 3>
-Out of scope (deferred).
+**Primary Users and Roles:**
+- **Customer** - Request and manage on-site car maintenance or repair services quickly when vehicle issues occur.
+- **Provider** — Receive, manage, and fulfill car service requests for drivers on the go.
+- **SysAdmin** — Maintain platform quality, security, and user account integrity.
 
-<deferred 1>
-<deferred 2>
-This document is requirements‑level and solution‑neutral; design decisions (UI layouts, API endpoints, schemas) are documented separately.
+**Scope (this semester):**
+- Profiles
+- Search Services
+- Booking
+- Parts
+- Reviews
 
-2. Functional Requirements (User Stories)
-Write each story as: As a <role>, I want <capability>, so that <benefit>. Each story includes at least one Given/When/Then scenario.
+**Out of scope (deferred):**
+- Availability, portfolios, and profession-specific credentials
+- Granular classifications of work types, specialized parts, and detailing packages
+- Advanced time/location scheduling, work hours, and detailed needed parts management
+- Variety in expertise tracking, 1–5 star ratings, and personalized recommendations
 
-2.1 Customer Stories
-US‑1 —
-Story: As a customer, I want … so that …
-Acceptance:
+> This document is **requirements-level** and solution-neutral; design decisions (UI layouts, API endpoints, schemas) are documented separately.
 
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
-US‑2 —
-Story: As a customer, I want … so that …
-Acceptance:
-
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
-2.2 Provider Stories
-US-20 —
-Story: As a provider, I want … so that …
-Acceptance:
-
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
-US-21 —
-Story: As a provider, I want … so that …
-Acceptance:
-
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
-2.3 SysAdmin Stories
-US‑30 —
-Story: As a sysadmin, I want … so that …
-Acceptance:
-
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
-US‑31 —
-Story: As a sysadmin, I want … so that …
-Acceptance:
-
-Scenario: <happy path>
-  Given <preconditions>
-  When  <action>
-  Then  <observable outcome>
+---
