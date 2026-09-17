@@ -36,6 +36,4 @@
 - Advanced time/location scheduling, work hours, and detailed needed parts management
 - Variety in expertise tracking, 1–5 star ratings, and personalized recommendations
 
-> This document is **requirements-level** and solution-neutral; design decisions (UI layouts, API endpoints, schemas) are documented separately.
 
----
