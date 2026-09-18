@@ -36,4 +36,58 @@
 - Advanced time/location scheduling, work hours, and detailed needed parts management
 - Variety in expertise tracking, 1–5 star ratings, and personalized recommendations
 
+---
+
+## 2. Functional Requirements (User Stories)
+
+### 2.1 Customer Stories
+- **US-1 - Create a customer profile**
+
+  _Story:_ As a customer, I want to create a profile with my vehicle information so that providers know what they're working on.
+
+  _Acceptance:_
+  ```gherkin
+  Scenario: Register with valid credentials
+   Given I am not registered
+   When I provide my details and vehicle information
+   Then my profile should be created
+   And I can view my profile
+  ```
+
+- **US-2 - Search for nearby providers**
+
+  _Story:_ As a customer, I want to search for providers by service type and location so that I can find help quickly.
+
+  _Acceptance:_
+  ```gherkin
+  Scenario: Search for a provider
+   Given I am logged in as a customer
+   When I select a service type and my location
+   Then I should see a list of matching nearby providers
+  ```
+
+- **US-3 - Book a service session**
+
+  _Story:_ As a customer, I want to book a service session with a provider so that my car issue gets resolved.
+
+  _Acceptance:_
+  ```gherkin
+  Scenario: Book a service session
+   Given I am logged in as a customer
+   When I select a provider and choose an available time slot
+   Then I should receive a confirmation of the booking
+   And I can view it on my dashboard
+  ```
+
+- **US-4 - Write a review after a session**
+
+  _Story:_ As a customer, I want to write a review after a session so that other customers can benefit from my experience.
+
+  _Acceptance:_
+  ```gherkin
+  Scenario: Submit a review
+   Given I have completed a service session with a provider
+   When I submit a review for that session
+   Then the review should be saved and visible to other customers
+  ```
 
