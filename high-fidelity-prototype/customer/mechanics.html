@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoAid - Find Mechanics</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+  body { color: #1a1a1a; background: #f6f7f9; }
+
+  /* Navbar */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+  }
+  .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e3a5f;
+    text-decoration: none;
+  }
+  .logo span { color: #e8590c; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #333;
+  }
+  .profile-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #10151c;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .nav-links a.profile-badge {
+    color: #fff;
+  }
+
+  .page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+  .page-header h1 {
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    color: #777;
+    font-size: 14px;
+  }
+
+  /* Search + filter bar */
+  .search-bar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .search-bar input,
+  .search-bar select {
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .search-bar input[type="text"] {
+    flex: 2;
+    min-width: 200px;
+  }
+  .search-bar select {
+    flex: 1;
+    min-width: 160px;
+  }
+  .search-bar button {
+    background: #e8590c;
+    color: #fff;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .search-bar button:hover { background: #d14e0a; }
+
+  /* Specialty filter chips */
+  .filter-chips {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .filter-chips button {
+    padding: 9px 18px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    color: #555;
+  }
+  .filter-chips button.active {
+    background: #10151c;
+    color: #fff;
+    border-color: #10151c;
+  }
+
+  .results-count {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 16px;
+  }
+
+  /* Mechanic list cards */
+  .mechanic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .mechanic-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 16px;
+  }
+  .mechanic-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .mechanic-card .details { flex: 1; }
+  .mechanic-card h4 { font-size: 17px; margin-bottom: 2px; }
+  .mechanic-card .specialty { font-size: 13px; color: #e8590c; font-weight: 600; margin-bottom: 6px; }
+  .mechanic-card .rating { font-size: 13px; color: #555; margin-bottom: 8px; }
+  .mechanic-card .desc { font-size: 13px; color: #777; margin-bottom: 14px; line-height: 1.4; }
+  .mechanic-card .card-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .mechanic-card .card-actions button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-view {
+    background: #f1f1f1;
+    color: #1a1a1a;
+  }
+  .btn-view:hover { background: #e2e2e2; }
+  .btn-request {
+    background: #e8590c;
+    color: #fff;
+  }
+  .btn-request:hover { background: #d14e0a; }
+
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #1e8449;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .availability .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1e8449;
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="../index.html" class="logo">Auto<span>Aid</span></a>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="mechanics.html">Find Mechanics</a>
+      <a href="history.html">My Requests</a>
+      <a href="profile.html" class="profile-badge">JD</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <h1>Find a Mechanic</h1>
+      <p>Browse trusted, certified mechanics near you</p>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search by name or issue (e.g. brakes, battery)">
+      <select>
+        <option>All Specialties</option>
+        <option>Engine & Diagnostics</option>
+        <option>Brakes & Suspension</option>
+        <option>Electrical & Battery</option>
+        <option>Tires & Wheels</option>
+      </select>
+      <select>
+        <option>Distance: Any</option>
+        <option>Within 5 miles</option>
+        <option>Within 10 miles</option>
+        <option>Within 25 miles</option>
+      </select>
+      <button onclick="searchMechanics()">Search</button>
+    </div>
+
+    <div class="filter-chips">
+      <button class="active" onclick="filterChip(this)">All</button>
+      <button onclick="filterChip(this)">Available Now</button>
+      <button onclick="filterChip(this)">Highest Rated</button>
+      <button onclick="filterChip(this)">Nearest</button>
+    </div>
+
+    <p class="results-count">Showing 4 mechanics near you</p>
+
+    <div class="mechanic-grid">
+
+      <div class="mechanic-card">
+        <img src="https://via.placeholder.com/64" alt="Jason Reyes">
+        <div class="details">
+          <div class="availability"><span class="dot"></span>Available Now</div>
+          <h4>Jason Reyes</h4>
+          <div class="specialty">Engine & Diagnostics</div>
+          <div class="rating">4.9 / 5.0 (52 reviews) · 2.3 mi away</div>
+          <p class="desc">ASE Certified. 10 years experience specializing in engine repair and diagnostics.</p>
+          <div class="card-actions">
+            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
+            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mechanic-card">
+        <img src="https://via.placeholder.com/64" alt="Maria Lopez">
+        <div class="details">
+          <div class="availability"><span class="dot"></span>Available Now</div>
+          <h4>Maria Lopez</h4>
+          <div class="specialty">Brakes & Suspension</div>
+          <div class="rating">4.8 / 5.0 (41 reviews) · 3.1 mi away</div>
+          <p class="desc">Certified brake specialist with a focus on fast, reliable roadside fixes.</p>
+          <div class="card-actions">
+            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
+            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mechanic-card">
+        <img src="https://via.placeholder.com/64" alt="Marcus White">
+        <div class="details">
+          <div class="availability"><span class="dot"></span>Available Now</div>
+          <h4>Marcus White</h4>
+          <div class="specialty">Electrical & Battery</div>
+          <div class="rating">4.7 / 5.0 (36 reviews) · 4.6 mi away</div>
+          <p class="desc">5 years helping drivers get back on the road with electrical and battery repairs.</p>
+          <div class="card-actions">
+            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
+            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mechanic-card">
+        <img src="https://via.placeholder.com/64" alt="Alicia Freeman">
+        <div class="details">
+          <div class="availability" style="color:#999;"><span class="dot" style="background:#ccc;"></span>Busy</div>
+          <h4>Alicia Freeman</h4>
+          <div class="specialty">Tires & Wheels</div>
+          <div class="rating">4.6 / 5.0 (29 reviews) · 5.8 mi away</div>
+          <p class="desc">Mobile tire specialist offering same-day flat repair and replacement.</p>
+          <div class="card-actions">
+            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
+            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function filterChip(btn) {
+      document.querySelectorAll('.filter-chips button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // No backend yet — sorting/filtering logic can be added later
+    }
+
+    function searchMechanics() {
+      // No backend yet — placeholder for search functionality
+      alert('Search functionality will be connected in a future milestone.');
+    }
+  </script>
+
+</body>
+</html>
