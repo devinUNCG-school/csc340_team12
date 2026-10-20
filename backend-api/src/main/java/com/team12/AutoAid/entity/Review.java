@@ -32,9 +32,8 @@ public class Review {
     @JoinColumn(name = "provider_id", nullable = false)
     private Provider provider;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", unique = true)
-    private Booking booking;
+    @Column(name = "booking_id", unique = true)
+    private Long bookingId;
 
     public Review() {}
 
@@ -60,6 +59,6 @@ public class Review {
     public Provider getProvider() { return provider; }
     public void setProvider(Provider provider) { this.provider = provider; }
 
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public Long getBookingId() { return bookingId; }
+    public void setBookingId(Long bookingId) { this.bookingId = bookingId; }
 }

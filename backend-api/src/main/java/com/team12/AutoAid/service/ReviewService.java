@@ -1,7 +1,6 @@
 package com.team12.AutoAid.service;
 
 import com.team12.AutoAid.entity.Review;
-import com.team12.AutoAid.repository.BookingRepository;
 import com.team12.AutoAid.repository.CustomerRepository;
 import com.team12.AutoAid.repository.ProviderRepository;
 import com.team12.AutoAid.repository.ReviewRepository;
@@ -15,16 +14,13 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CustomerRepository customerRepository;
     private final ProviderRepository providerRepository;
-    private final BookingRepository bookingRepository;
 
     public ReviewService(ReviewRepository reviewRepository,
                          CustomerRepository customerRepository,
-                         ProviderRepository providerRepository,
-                         BookingRepository bookingRepository) {
+                         ProviderRepository providerRepository) {
         this.reviewRepository = reviewRepository;
         this.customerRepository = customerRepository;
         this.providerRepository = providerRepository;
-        this.bookingRepository = bookingRepository;
     }
 
     public Review createReview(Long customerId, Long providerId, Long bookingId, Review review) {
@@ -33,15 +29,6 @@ public class ReviewService {
         var provider = providerRepository.findById(providerId)
                 .orElseThrow(() -> new IllegalArgumentException("Provider not found"));
         
-        if (bookingId != null) {
-            if (reviewRepository.findByBookingId(bookingId).isPresent()) {
-                throw new IllegalStateException("Review already exists for this booking");
-            }
-            var booking = bookingRepository.findById(bookingId)
-                    .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-            review.setBooking(booking);
-        }
-
         review.setCustomer(customer);
         review.setProvider(provider);
         return reviewRepository.save(review);
