@@ -68,7 +68,7 @@
 
 - **US-3 - Book a service session**
 
-  _Story:_ As a customer, I want to book a service session with a provider so that my car issue gets resolved.
+  _Story:_ As a customer, I want to schedule a service appointment with a provider in order to have my car problem fixed.
 
   _Acceptance:_
   ```gherkin
