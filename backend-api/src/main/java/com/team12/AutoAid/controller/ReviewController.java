@@ -25,7 +25,7 @@ public class ReviewController {
     public ResponseEntity<?> createReview(
             @PathVariable Long customerId,
             @RequestParam Long providerId,
-            @RequestParam(required = false) Long bookingId,
+            @RequestParam Long bookingId,
             @Valid @RequestBody Review review) {
         try {
             Review created = reviewService.createReview(customerId, providerId, bookingId, review);
