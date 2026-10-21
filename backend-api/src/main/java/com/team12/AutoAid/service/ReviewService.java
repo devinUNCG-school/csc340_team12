@@ -32,14 +32,22 @@ public class ReviewService {
 
     public Review createReview(Long customerId, Long providerId, Long bookingId, Review review) {
         var customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
         var provider = providerRepository.findById(providerId)
-                .orElseThrow(() -> new IllegalArgumentException("Provider not found"));
-        bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-        
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Provider not found"));
+        var booking = bookingRepository.findById(bookingId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        if (!booking.getCustomer().getId().equals(customerId)
+            || !booking.getProvider().getId().equals(providerId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Booking does not match this customer and provider");
+        }
+
+        review.setId(null);
         review.setCustomer(customer);
         review.setProvider(provider);
+        review.setBookingId(bookingId);
         return reviewRepository.save(review);
     }
 
