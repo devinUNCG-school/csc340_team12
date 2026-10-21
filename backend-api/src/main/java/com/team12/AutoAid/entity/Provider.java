@@ -1,6 +1,7 @@
 package com.team12.AutoAid.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -22,11 +23,12 @@ public class Provider {
     private String email;
 
     @NotBlank(message = "Password is required")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String phoneNumber;
     private String profession;
-
+    
     @ElementCollection
     private List<String> certifications = new ArrayList<>();
 
