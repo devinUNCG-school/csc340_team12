@@ -28,6 +28,16 @@ public class Customer {
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
+    @NotBlank(message = "Vehicle make is required")
+    private String vehicleMake;
+
+    @NotBlank(message = "Vehicle model is required")
+    private String vehicleModel;
+
+    private Integer vehicleYear;   
+    private String engineType;
+    private String vehicleColor;
+
     // Getters and Setters
 
     public Long getId() {
@@ -61,4 +71,19 @@ public class Customer {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String getVehicleMake() { return vehicleMake; }
+        public void setVehicleMake(String vehicleMake) { this.vehicleMake = vehicleMake; }
+
+    public String getVehicleModel() { return vehicleModel; }
+        public void setVehicleModel(String vehicleModel) { this.vehicleModel = vehicleModel; }
+
+    public Integer getVehicleYear() { return vehicleYear; }
+        public void setVehicleYear(Integer vehicleYear) { this.vehicleYear = vehicleYear; }
+
+    public String getEngineType() { return engineType; }
+        public void setEngineType(String engineType) { this.engineType = engineType; }
+
+    public String getVehicleColor() { return vehicleColor; }
+        public void setVehicleColor(String vehicleColor) { this.vehicleColor = vehicleColor; }
 }

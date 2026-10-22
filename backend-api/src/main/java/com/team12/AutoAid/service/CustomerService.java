@@ -36,6 +36,11 @@ public class CustomerService {
         existingCustomer.setName(updatedCustomer.getName());
         existingCustomer.setEmail(updatedCustomer.getEmail());
         existingCustomer.setPhoneNumber(updatedCustomer.getPhoneNumber());
+        existingCustomer.setVehicleMake(updatedCustomer.getVehicleMake());
+        existingCustomer.setVehicleModel(updatedCustomer.getVehicleModel());
+        existingCustomer.setVehicleYear(updatedCustomer.getVehicleYear());
+        existingCustomer.setEngineType(updatedCustomer.getEngineType());
+        existingCustomer.setVehicleColor(updatedCustomer.getVehicleColor());
         return customerRepository.save(existingCustomer);
     }
 
