@@ -1,62 +1,111 @@
 # AutoAid Mechanics backend API
 
-# UML Class Diagram
+Spring Boot + PostgreSQL (Neon) API for AutoAid, deployed on Render with Docker.
+
+**Live API:** https://csc340-team12.onrender.com
+
+**Note:** The app runs on Render's free tier, which sleeps when idle. The first request can take up to a minute to respond.
+
+## UML Class Diagram
 
 ![Class Diagram](../docs/uml-class.png)
 
-# API Overview
+## Endpoints
 
-**Version:** 1.0  
-**Last Updated:** October 20, 2026  
+Errors: `400` for invalid input, `404` for a missing ID.
 
-**Base URL:**
-
-- local: `http://localhost:8080/api`
-- production: `https://autoaid-mechanics-api.onrender.com/api`
-
-JSON request bodies are validated. The endpoint tables list applicable error codes: `400 Bad Request` for invalid input, `404 Not Found` for missing resources, and `409 Conflict` for duplicate records or invalid state transitions.
-
-## Profile and discovery
-
-| Method | Path | Purpose | Response code | Error codes | Description / Feature |
+| Method | Path | Description | Use case | Success | Implemented by |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/api/customers` | Register a customer profile | `201 Created` | `400, 409` | Customer profile creation |
-| `GET` | `/api/customers/{customerId}` | Read a customer profile | `200 OK` | `404` | Customer profile lookup |
-| `PUT` | `/api/customers/{customerId}` | Update a customer profile | `200 OK` | `400, 404, 409` | Modify customer profile |
-| `POST` | `/api/providers` | Register a provider/mechanic profile | `201 Created` | `400, 409` | Provider profile creation |
-| `GET` | `/api/providers?specialty={specialty}` | Browse providers by specialty or certification | `200 OK` | — | Browse specialists (tune-up, bodywork, paint, etc.) |
-| `GET` | `/api/providers/{providerId}` | Read a provider profile | `200 OK` | `404` | Provider profile lookup |
-| `PUT` | `/api/providers/{providerId}` | Update a provider profile | `200 OK` | `400, 404, 409` | Modify provider profile |
-| `DELETE` | `/api/providers/{providerId}` | Remove a provider profile | `204 No Content` | `404` | Remove provider profile |
-| `GET` | `/api/services?category={serviceType}` | Browse available repair and detailing services | `200 OK` | — | Browse services (oil change, bodywork, detailing, etc.) |
+| POST | /api/customers | Create a customer profile | US-1 | 201 |
+| GET | /api/customers | List customers | US-1 | 200 | 
+| GET | /api/customers/{id} | View a customer profile | US-1 | 200 |  
+| PUT | /api/customers/{id} | Update a customer profile | US-1 | 200 |
+| DELETE | /api/customers/{id} | Delete a customer | US-1 | 204 |
+| POST | /api/bookings | Book a service session | US-3 | 201 | 
+| GET | /api/bookings | List all bookings | US-3 | 200 |   |
+| GET | /api/bookings/{id} | View one booking | US-3 | 200 |
+| GET | /api/customers/{customerId}/bookings | View a customer's bookings | US-3 | 200 |
+| POST | /customers/{customerId}/reviews?providerId=&bookingId= | Review a booked session | US-4 | 201 | 
+| GET | /customers/{customerId}/reviews | View a customer's reviews | US-4 | 200 | 
+| POST | /providers | Create a provider profile | US-5 | 201 | 
+| GET | /providers?specialty= | List or filter providers | US-5 | 200 |
+| GET | /providers/{id} | View a provider profile | US-5 | 200 | 
+| PUT | /providers/{id} | Update a provider profile | US-5 | 200 | 
+| DELETE | /providers/{id} | Delete a provider | US-5 | 204 |
+| GET | /providers/{providerId}/reviews | View a provider's reviews | US-7 | 200 |
+| PATCH | /providers/{providerId}/reviews/{reviewId}/reply | Reply to a review | US-7 | 200 |
 
-### Example Customer Request
 
-```http
-POST /api/providers
-Content-Type: application/json
 
+
+## Example Request Bodies
+
+### POST /api/customers
+```json
 {
-  "name": "Devin Hawkins",
-  "email": "devin.hawkins@example.com",
-  "password": "securePassword123",
-  "phoneNumber": "+1-336-555-0101",
-  "accountStatus": "ACTIVE",
-  "vehicleMake": "Acura",
-  "vehicleModel": "TL",
-  "vehicleYear": 2013,
-  "vehicleNotes": "Maintained lower splash guard and ambient lighting."
+  "name": "Jordan Smith",
+  "email": "jordan@example.com",
+  "phoneNumber": "336-555-0111"
 }
+```
 
-POST /api/customers
-Content-Type: application/json
-
+### PUT /api/customers/{id}
+```json
 {
-  "name": "Za'Kwon Hall",
-  "email": "zakwon.hall@example.com",
-  "password": "securePassword123",
-  "phoneNumber": "+1-336-555-0202",
-  "profession": "Master Automotive Technician",
-  "certifications": ["ASE Certified", "Collision Repair Specialist"],
-  "specialties": ["Bodywork", "Paint Job", "Tune-up"]
+  "name": "Jordan Smith",
+  "email": "jordan@example.com",
+  "phoneNumber": "336-555-0999"
 }
+```
+
+### POST /api/bookings
+```json
+{
+  "scheduledTime": "2026-11-05T10:30:00",
+  "issueDescription": "Brakes are squeaking",
+  "customer": { "id": 1 },
+  "provider": { "id": 1 },
+  "service": { "id": 1 }
+}
+```
+
+### POST /customers/{customerId}/reviews?providerId=1&bookingId=1
+```json
+{
+  "rating": 5,
+  "comment": "Fast and friendly"
+}
+```
+
+### POST /providers
+```json
+{
+  "name": "Alex Rivera",
+  "email": "alex@example.com",
+  "password": "examplePassword",
+  "phoneNumber": "336-555-0300",
+  "profession": "Detailer",
+  "specialties": ["Detailing"],
+  "certifications": []
+}
+```
+
+### PUT /providers/{id}
+```json
+{
+  "name": "Alex Rivera",
+  "email": "alex@example.com",
+  "password": "examplePassword",
+  "phoneNumber": "336-555-0999",
+  "profession": "Detailer",
+  "specialties": ["Detailing"],
+  "certifications": []
+}
+```
+
+### PATCH /providers/{providerId}/reviews/{reviewId}/reply
+```json
+{
+  "reply": "Thanks for the feedback!"
+}
+```
