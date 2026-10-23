@@ -7,7 +7,8 @@ Spring Boot + PostgreSQL (Neon) API for AutoAid, deployed on Render with Docker.
 **Note:** The app runs on Render's free tier, which sleeps when idle. The first request can take up to a minute to respond.
 
 ## UML Class Diagram
-<img width="1724" height="1362" alt="uml-class (1)" src="https://github.com/user-attachments/assets/3de2bc99-6e9b-426c-8331-4ec1ec11e21b" />
+<img width="1751" height="1362" alt="uml-class (2)" src="https://github.com/user-attachments/assets/4612317a-f77a-4442-a550-55d4a0fd6251" />
+
 
 
 
