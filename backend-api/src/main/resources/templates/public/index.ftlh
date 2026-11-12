@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoAid - Roadside & Mechanic Matching</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      color: #1a1a1a;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+
+    .logo span {
+      color: #e8590c;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn {
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      color: #333;
+    }
+
+    .btn-outline {
+      border: 1px solid #1a1a1a;
+      background: transparent;
+      color: #1a1a1a;
+    }
+
+    .btn-solid {
+      background: #e8590c;
+      color: #fcfcff;
+    }
+
+    /* Hero */
+    .hero {
+      background: #10151c;
+      color: #fff;
+      text-align: center;
+      padding: 90px 20px;
+    }
+
+    .hero h1 {
+      font-size: 46px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .highlight {
+      color: #e8590c;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #cfd6dd;
+      max-width: 650px;
+      margin: 0 auto 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .hero-buttons button {
+      padding: 16px 34px;
+      font-size: 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-customer {
+      background: #f1f1f1;
+      color: #1a1a1a;
+    }
+
+    .btn-mechanic {
+      background: #e8590c;
+      color: #fff;
+    }
+
+    /* Section titles */
+    .section-title {
+      text-align: center;
+      font-size: 34px;
+      margin: 70px 0 40px;
+    }
+
+    /* Mechanic cards */
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 0 60px 60px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 300px;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-body h3 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .card-body .specialty {
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .card-body .rating {
+      color: #e8590c;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .card-body p.desc {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* How it works */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 0 60px 70px;
+      background: #f6f7f9;
+      flex-wrap: wrap;
+    }
+
+    .steps .section-title {
+      width: 100%;
+    }
+
+    .step {
+      background: #fff;
+      width: 300px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .step .num {
+      font-size: 34px;
+      color: #cfd6dd;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      color: #555;
+      font-size: 14px;
+    }
+
+    /* CTA */
+    .cta {
+      background: #10151c;
+      color: #fff;
+      text-align: center;
+      padding: 70px 20px;
+    }
+
+    .cta h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .cta p {
+      color: #cfd6dd;
+      margin-bottom: 30px;
+    }
+
+    .cta button {
+      background: #e8590c;
+      color: #fff;
+      padding: 16px 34px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #0b0f14;
+      color: #8a93a0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">Auto<span>Aid</span></div>
+    <div class="nav-links">
+      <a href="#features" class="btn">Features</a>
+      <a href="#how-it-works" class="btn">How It Works</a>
+      <a href="login.html" class="btn btn-outline">Login</a>
+      <a href="/customers/new" class="btn btn-solid">Sign up</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Find Help <span class="highlight">Fast</span> When Your Car Breaks Down</h1>
+    <p>Connect with trusted, nearby mechanics matched to your vehicle issue, location, and schedule. Roadside help
+      starts here.</p>
+    <div class="hero-buttons">
+      <button class="btn-customer" onclick="location.href='/customers/new'">I'm a Customer</button>
+      <button class="btn-mechanic" onclick="location.href='/customers/new'">I'm a Mechanic</button>
+    </div>
+  </section>
+
+  <h2 class="section-title" id="features">Trusted Mechanics</h2>
+  <div class="cards">
+    <div class="card">
+      <img src="/images/jason.jpg" alt="Jason Reyes">
+      <div class="card-body">
+        <h3>Jason Reyes</h3>
+        <div class="specialty">Engine & Diagnostics</div>
+        <div class="rating">4.9 / 5.0 (52 reviews)</div>
+        <p class="desc">ASE Certified. 10 years experience specializing in engine repair and diagnostics.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/images/maria.jpg" alt="Maria Lopez">
+      <div class="card-body">
+        <h3>Maria Lopez</h3>
+        <div class="specialty">Brakes & Suspension</div>
+        <div class="rating">4.8 / 5.0 (41 reviews)</div>
+        <p class="desc">Certified brake specialist with a focus on fast, reliable roadside fixes.</p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/images/marcus.jpg" alt="Marcus White">
+      <div class="card-body">
+        <h3>Marcus White</h3>
+        <div class="specialty">Electrical & Battery</div>
+        <div class="rating">4.7 / 5.0 (36 reviews)</div>
+        <p class="desc">5 years helping drivers get back on the road with electrical and battery repairs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps" id="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Describe Your Issue</h3>
+      <p>Tell us what's wrong with your vehicle and where you're located.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h3>Get Matched</h3>
+      <p>Browse nearby mechanics matched to your issue, ratings, and availability.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>Book & Get Help</h3>
+      <p>Schedule a repair or request roadside assistance in just a few taps.</p>
+    </div>
+  </div>
+
+  <section class="cta">
+    <h2>Stuck on the Road?</h2>
+    <p>Join drivers finding fast, reliable help with AutoAid.</p>
+    <button onclick="location.href='/customers/new'">Start Free Today</button>
+  </section>
+
+  <footer>
+    &copy; 2026 AutoAid. All rights reserved. Connecting drivers with trusted mechanics.
+  </footer>
+
+</body>
+
+</html>
