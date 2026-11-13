@@ -1,6 +1,10 @@
 package com.team12.AutoAid.service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -67,5 +71,78 @@ public class BookingService {
         booking.setService(service);
         booking.setStatus("PENDING");
         return bookingRepository.save(booking);
+    }
+
+    /** Frequency codes stored on a booking, mapped to the label shown to customers. */
+    public static final Map<String, String> FREQUENCIES = new LinkedHashMap<>();
+    static {
+        FREQUENCIES.put("ONE_TIME", "One-time service");
+        FREQUENCIES.put("MONTHLY", "Monthly checkup");
+        FREQUENCIES.put("QUARTERLY", "Every 3 months");
+        FREQUENCIES.put("BIANNUAL", "Every 6 months");
+    }
+
+    /** Published services a customer can book, sorted by mechanic then service name. */
+    public List<Service> getBookableServices() {
+        return serviceRepository.findAll().stream()
+                .filter(s -> s.getProvider() != null)
+                .filter(s -> s.getStatus() == null || s.getStatus().equalsIgnoreCase("PUBLISHED"))
+                .sorted(Comparator.comparing((Service s) -> s.getProvider().getName(),
+                                Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER))
+                        .thenComparing(Service::getName, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)))
+                .toList();
+    }
+
+    /**
+     * Customer books a service. The mechanic is taken from the service itself.
+     * Throws IllegalArgumentException with a user-friendly message for bad input.
+     */
+    public Booking bookService(Long customerId, Long serviceId, LocalDateTime scheduledTime,
+                               String issueDescription, String frequency) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+        Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Please choose a service from the list."));
+        if (service.getProvider() == null) {
+            throw new IllegalArgumentException("That service isn't linked to a mechanic yet.");
+        }
+        if (scheduledTime == null || !scheduledTime.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Please pick a date and time in the future.");
+        }
+        if (frequency == null || !FREQUENCIES.containsKey(frequency)) {
+            throw new IllegalArgumentException("Please choose how often you want this service.");
+        }
+
+        Booking booking = new Booking();
+        booking.setCustomer(customer);
+        booking.setService(service);
+        booking.setProvider(service.getProvider());
+        booking.setScheduledTime(scheduledTime);
+        booking.setIssueDescription(issueDescription.trim());
+        booking.setFrequency(frequency);
+        booking.setStatus("PENDING");
+        return bookingRepository.save(booking);
+    }
+
+    /** Customer cancels one of their own bookings. Completed or already-cancelled bookings can't be cancelled. */
+    public Booking cancelBooking(Long customerId, Long bookingId) {
+        Booking booking = getBookingById(bookingId);
+        if (booking.getCustomer() == null || !booking.getCustomer().getId().equals(customerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found");
+        }
+        String status = booking.getStatus() == null ? "PENDING" : booking.getStatus().toUpperCase();
+        if (status.equals("COMPLETED") || status.equals("CANCELLED")) {
+            throw new IllegalArgumentException("This booking is already " + status.toLowerCase() + ".");
+        }
+        booking.setStatus("CANCELLED");
+        return bookingRepository.save(booking);
+    }
+
+    /** A customer's bookings, soonest appointment first. */
+    public List<Booking> getBookingsForCustomer(Long customerId) {
+        return getBookingsByCustomer(customerId).stream()
+                .sorted(Comparator.comparing(Booking::getScheduledTime,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
     }
 }

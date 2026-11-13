@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoAid - Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+  body { color: #1a1a1a; background: #f6f7f9; }
+
+  /* Navbar */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+  }
+  .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e3a5f;
+    text-decoration: none;
+  }
+  .logo span { color: #e8590c; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #333;
+    
+  }
+
+  .nav-links a.profile-badge {
+  color: #fff;
+}
+  .profile-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #10151c;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Welcome banner */
+  .welcome-banner {
+    background: #10151c;
+    color: #fff;
+    border-radius: 14px;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .welcome-banner h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .welcome-banner p {
+    color: #cfd6dd;
+    font-size: 15px;
+  }
+  .request-btn {
+    background: #e8590c;
+    color: #fff;
+    border: none;
+    padding: 16px 30px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .request-btn:hover { background: #d14e0a; }
+
+  /* Stat cards */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .stat-card .stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e8590c;
+  }
+  .stat-card .stat-label {
+    font-size: 14px;
+    color: #777;
+    margin-top: 4px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+
+  /* Active request card */
+  .active-request {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .active-request .info h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .active-request .info p {
+    font-size: 14px;
+    color: #666;
+  }
+  .status-pill {
+    background: #fff4e8;
+    color: #e8590c;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .view-btn {
+    background: #10151c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* Mechanic cards */
+  .mechanic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .mechanic-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+  }
+  .mechanic-card img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+  }
+  .mechanic-card h4 { font-size: 16px; margin-bottom: 4px; }
+  .mechanic-card .specialty { font-size: 13px; color: #777; margin-bottom: 8px; }
+  .mechanic-card .rating { font-size: 13px; color: #e8590c; font-weight: 600; margin-bottom: 14px; }
+  .mechanic-card button {
+    width: 100%;
+    padding: 10px;
+    background: #f1f1f1;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .mechanic-card button:hover { background: #e8590c; color: #fff; }
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="../index.html" class="logo">Auto<span>Aid</span></a>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="mechanics.html">Find Mechanics</a>
+      <a href="history.html">My Requests</a>
+      <a href="profile.html" class="profile-badge">JD</a>
+    </div>
+  </nav>
+
+    <div class="welcome-banner">
+      <div>
+        <h1>Welcome back, John</h1>
+        <p>Need help with your vehicle? Get matched with a trusted mechanic in minutes.</p>
+      </div>
+      <button class="request-btn" onclick="location.href='request-help.html'">+ Request Help</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1</div>
+        <div class="stat-label">Active Request</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Completed Repairs</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Active Request</h2>
+    <div class="active-request">
+      <div class="info">
+        <h3>Battery Won't Start</h3>
+        <p>Matched with Jason Reyes · Requested Sep 20, 2026</p>
+      </div>
+      <span class="status-pill">In Progress</span>
+      <button class="view-btn" onclick="location.href='request-status.html'">View Details</button>
+    </div>
+
+    <h2 class="section-title">Recommended Mechanics</h2>
+    <div class="mechanic-grid">
+      <div class="mechanic-card">
+        <img src="../images/jason.jpg" alt="Jason Reyes">
+        <h4>Jason Reyes</h4>
+        <div class="specialty">Engine & Diagnostics</div>
+        <div class="rating">4.9 / 5.0 (52 reviews)</div>
+        <button onclick="location.href='mechanic-profile.html'">View Profile</button>
+      </div>
+      <div class="mechanic-card">
+        <img src="../images/maria.jpg" alt="Maria Lopez">
+        <h4>Maria Lopez</h4>
+        <div class="specialty">Brakes & Suspension</div>
+        <div class="rating">4.8 / 5.0 (41 reviews)</div>
+        <button onclick="location.href='mechanic-profile.html'">View Profile</button>
