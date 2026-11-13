@@ -22,7 +22,7 @@ public class CustomerPageController {
     @GetMapping("/new")
     public String showForm(Model model) {
         model.addAttribute("customer", new Customer());
-        return "customer-form";
+        return "public/register";
     }
 
     @PostMapping
@@ -31,7 +31,7 @@ public class CustomerPageController {
         if (result.hasErrors()) {
             model.addAttribute("errors", result.getAllErrors().stream()
                     .map(e -> e.getDefaultMessage()).toList());
-            return "customer-form";
+            return "public/register";
         }
         Customer saved = customerService.createCustomer(customer);
         return "redirect:/customers/" + saved.getId();
@@ -41,10 +41,10 @@ public class CustomerPageController {
     public String showProfile(@PathVariable Long id, Model model) {
         try {
             model.addAttribute("customer", customerService.getCustomerById(id));
-            return "customer-profile";
+            return "customer/profile";
         } catch (ResponseStatusException e) {
             model.addAttribute("message", "Customer " + id + " was not found.");
-            return "error-message";
+            return "shared/error";
         }
     }
 }
