@@ -126,6 +126,16 @@
   }
   .submit-btn:hover { background: #d14e0a; }
 
+  .form-errors {
+    background: #fdecea;
+    color: #b42318;
+    border: 1px solid #f5c2c0;
+    border-radius: 6px;
+    padding: 12px 14px 12px 32px;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+
   .login-link {
     text-align: center;
     margin-top: 20px;
@@ -142,7 +152,7 @@
 <body>
 
   <nav>
-    <a href="index.html" class="logo">Auto<span>Aid</span></a>
+    <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
       <a href="login.html" class="btn-outline">Login</a>
     </div>
@@ -158,30 +168,51 @@
         <button type="button" onclick="selectRole(this, 'mechanic')">I'm a Mechanic</button>
       </div>
 
-      <form onsubmit="handleRegister(event)">
+      <form action="/customers" method="post">
+        <#if errors??>
+          <ul class="form-errors">
+            <#list errors as e><li>${e}</li></#list>
+          </ul>
+        </#if>
+
         <div class="form-group">
           <label for="fullname">Full Name</label>
-          <input type="text" id="fullname" placeholder="John Doe" required>
+          <input type="text" id="fullname" name="name" value="${customer.name!}" placeholder="John Doe" required>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="john@example.com" required>
+          <input type="email" id="email" name="email" value="${customer.email!}" placeholder="john@example.com" required>
         </div>
 
         <div class="form-group">
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+          <input type="tel" id="phone" name="phoneNumber" value="${customer.phoneNumber!}" placeholder="(555) 123-4567" required>
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Create a password" required>
+          <label for="vehicleMake">Vehicle Make</label>
+          <input type="text" id="vehicleMake" name="vehicleMake" value="${customer.vehicleMake!}" placeholder="Honda" required>
         </div>
 
         <div class="form-group">
-          <label for="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" placeholder="Re-enter password" required>
+          <label for="vehicleModel">Vehicle Model</label>
+          <input type="text" id="vehicleModel" name="vehicleModel" value="${customer.vehicleModel!}" placeholder="Civic" required>
+        </div>
+
+        <div class="form-group">
+          <label for="vehicleYear">Year</label>
+          <input type="number" id="vehicleYear" name="vehicleYear" value="${(customer.vehicleYear?c)!}" placeholder="2018" min="1900" max="2100">
+        </div>
+
+        <div class="form-group">
+          <label for="engineType">Engine Type</label>
+          <input type="text" id="engineType" name="engineType" value="${customer.engineType!}" placeholder="V6, Hybrid, Electric...">
+        </div>
+
+        <div class="form-group">
+          <label for="vehicleColor">Color</label>
+          <input type="text" id="vehicleColor" name="vehicleColor" value="${customer.vehicleColor!}" placeholder="Silver">
         </div>
 
         <button type="submit" class="submit-btn">Create Account</button>
@@ -195,12 +226,6 @@
     function selectRole(btn, role) {
       document.querySelectorAll('.role-toggle button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-    }
-
-    function handleRegister(event) {
-      event.preventDefault();
-      // No backend yet — just redirect to the customer dashboard as a placeholder
-      window.location.href = 'dashboard.html';
     }
   </script>
 

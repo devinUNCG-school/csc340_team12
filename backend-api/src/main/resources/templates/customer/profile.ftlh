@@ -225,21 +225,47 @@
     font-size: 14px;
     cursor: pointer;
   }
+  .danger-zone form { display: inline; }
+
+  /* Messages */
+  .success-banner {
+    background: #e7f6ec;
+    color: #1e6b3a;
+    border: 1px solid #b7e1c4;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .form-errors {
+    background: #fdecea;
+    color: #b42318;
+    border: 1px solid #f5c2c0;
+    border-radius: 6px;
+    padding: 12px 14px 12px 32px;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
 </style>
 </head>
 <body>
 
+<#assign initials = (customer.name?has_content)?then(customer.name?trim[0]?upper_case, "?")>
   <nav>
-    <a href="../index.html" class="logo">Auto<span>Aid</span></a>
+    <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
       <a href="dashboard.html">Dashboard</a>
       <a href="mechanics.html">Find Mechanics</a>
       <a href="history.html">My Requests</a>
-      <a href="profile.html" class="profile-badge">JD</a>
+      <a href="/customers/${customer.id?c}" class="profile-badge">${initials}</a>
     </div>
   </nav>
 
   <div class="page-wrap">
+
+    <#if success??>
+      <div class="success-banner">${success}</div>
+    </#if>
 
     <div class="page-header">
       <h1>My Profile</h1>
@@ -247,73 +273,84 @@
     </div>
 
     <div class="profile-summary">
-      <div class="avatar-large">JD</div>
+      <div class="avatar-large">${initials}</div>
       <div>
-        <h2>John Doe</h2>
-        <p>john.doe@email.com · Customer since Jan 2026</p>
+        <h2>${customer.name!}</h2>
+        <p>${customer.email!} · ${customer.phoneNumber!}</p>
       </div>
-      <button class="change-photo-btn">Change Photo</button>
     </div>
 
     <div class="section-card">
-      <h3>Account Information</h3>
-      <form onsubmit="return false;">
+      <h3>My Vehicle</h3>
+      <div class="vehicle-item">
+        <div>
+          <h4><#if customer.vehicleYear??>${customer.vehicleYear?c} </#if>${customer.vehicleMake!"No vehicle on file"} ${customer.vehicleModel!}</h4>
+          <p>
+            Engine: ${customer.engineType!"—"} · Color: ${customer.vehicleColor!"—"}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Edit Profile</h3>
+      <form action="/customers/${customer.id?c}" method="post">
+        <#if errors??>
+          <ul class="form-errors">
+            <#list errors as e><li>${e}</li></#list>
+          </ul>
+        </#if>
         <div class="form-row">
           <div class="form-group">
             <label for="fullname">Full Name</label>
-            <input type="text" id="fullname" value="John Doe">
+            <input type="text" id="fullname" name="name" value="${customer.name!}" required>
           </div>
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" value="john.doe@email.com">
+            <input type="email" id="email" name="email" value="${customer.email!}" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" value="(555) 123-4567">
+            <input type="tel" id="phone" name="phoneNumber" value="${customer.phoneNumber!}" required>
           </div>
           <div class="form-group">
-            <label for="address">Home Address</label>
-            <input type="text" id="address" value="123 Main St, Greensboro, NC">
+            <label for="vehicleYear">Vehicle Year</label>
+            <input type="number" id="vehicleYear" name="vehicleYear" value="${(customer.vehicleYear?c)!}" min="1900" max="2100">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="vehicleMake">Vehicle Make</label>
+            <input type="text" id="vehicleMake" name="vehicleMake" value="${customer.vehicleMake!}" required>
+          </div>
+          <div class="form-group">
+            <label for="vehicleModel">Vehicle Model</label>
+            <input type="text" id="vehicleModel" name="vehicleModel" value="${customer.vehicleModel!}" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="engineType">Engine Type</label>
+            <input type="text" id="engineType" name="engineType" value="${customer.engineType!}">
+          </div>
+          <div class="form-group">
+            <label for="vehicleColor">Color</label>
+            <input type="text" id="vehicleColor" name="vehicleColor" value="${customer.vehicleColor!}">
           </div>
         </div>
         <button type="submit" class="save-btn">Save Changes</button>
       </form>
     </div>
 
-    <div class="section-card">
-      <h3>My Vehicles</h3>
-
-      <div class="vehicle-item">
-        <div>
-          <h4>2017 Cadillac CTS-V</h4>
-          <p>License Plate: NC-4821 · Black</p>
-        </div>
-        <div class="vehicle-actions">
-          <button>Edit</button>
-          <button>Remove</button>
-        </div>
-      </div>
-
-      <div class="vehicle-item">
-        <div>
-          <h4>2021 Ford F-150</h4>
-          <p>License Plate: NC-9012 · Silver</p>
-        </div>
-        <div class="vehicle-actions">
-          <button>Edit</button>
-          <button>Remove</button>
-        </div>
-      </div>
-
-      <button class="add-vehicle-btn">+ Add Vehicle</button>
-    </div>
-
     <div class="section-card danger-zone">
       <h3>Account Actions</h3>
-      <button class="logout-btn" onclick="location.href='../login.html'">Log Out</button>
-      <button class="delete-btn">Delete Account</button>
+      <button class="logout-btn" onclick="location.href='/'">Log Out</button>
+      <form action="/customers/${customer.id?c}/delete" method="post"
+            onsubmit="return confirm('Delete this account? This cannot be undone.');">
+        <button type="submit" class="delete-btn">Delete Account</button>
+      </form>
     </div>
 
   </div>
