@@ -200,17 +200,53 @@
     border-radius: 50%;
     background: #1e8449;
   }
+  .availability.inactive { color: #999; }
+  .availability.inactive .dot { background: #ccc; }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .mechanic-card .card-actions a {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+  }
+  .clear-link {
+    align-self: center;
+    font-size: 14px;
+    color: #555;
+  }
+  .empty-state {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    color: #777;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
 </style>
 </head>
 <body>
 
   <nav>
-    <a href="../index.html" class="logo">Auto<span>Aid</span></a>
+    <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="mechanics.html">Find Mechanics</a>
-      <a href="history.html">My Requests</a>
-      <a href="profile.html" class="profile-badge">JD</a>
+      <a href="/mechanics">Find Mechanics</a>
+      <a href="/customers/new">Sign Up</a>
     </div>
   </nav>
 
@@ -218,114 +254,65 @@
 
     <div class="page-header">
       <h1>Find a Mechanic</h1>
-      <p>Browse trusted, certified mechanics near you</p>
+      <p>Browse certified mechanics and the services they offer</p>
     </div>
 
-    <div class="search-bar">
-      <input type="text" placeholder="Search by name or issue (e.g. brakes, battery)">
-      <select>
-        <option>All Specialties</option>
-        <option>Engine & Diagnostics</option>
-        <option>Brakes & Suspension</option>
-        <option>Electrical & Battery</option>
-        <option>Tires & Wheels</option>
+    <form class="search-bar" action="/mechanics" method="get">
+      <input type="text" name="name" value="${name}" placeholder="Search by name or issue (e.g. brakes, battery)">
+      <select name="specialty">
+        <option value="">All Specialties</option>
+        <#list specialties as sp>
+          <option value="${sp}" <#if sp == specialty>selected</#if>>${sp}</option>
+        </#list>
       </select>
-      <select>
-        <option>Distance: Any</option>
-        <option>Within 5 miles</option>
-        <option>Within 10 miles</option>
-        <option>Within 25 miles</option>
-      </select>
-      <button onclick="searchMechanics()">Search</button>
-    </div>
+      <button type="submit">Search</button>
+      <#if name?has_content || specialty?has_content>
+        <a href="/mechanics" class="clear-link">Clear</a>
+      </#if>
+    </form>
 
-    <div class="filter-chips">
-      <button class="active" onclick="filterChip(this)">All</button>
-      <button onclick="filterChip(this)">Available Now</button>
-      <button onclick="filterChip(this)">Highest Rated</button>
-      <button onclick="filterChip(this)">Nearest</button>
-    </div>
+    <p class="results-count">
+      Showing ${providers?size} mechanic<#if providers?size != 1>s</#if>
+      <#if specialty?has_content> in ${specialty}</#if>
+      <#if name?has_content> matching "${name}"</#if>
+    </p>
 
-    <p class="results-count">Showing 4 mechanics near you</p>
-
+    <#if providers?has_content>
     <div class="mechanic-grid">
-
+      <#list providers as p>
       <div class="mechanic-card">
-        <img src="../images/jason.jpg" alt="Jason Reyes">
+        <div class="avatar">${(p.name?has_content)?then(p.name?trim[0]?upper_case, "?")}</div>
         <div class="details">
-          <div class="availability"><span class="dot"></span>Available Now</div>
-          <h4>Jason Reyes</h4>
-          <div class="specialty">Engine & Diagnostics</div>
-          <div class="rating">4.9 / 5.0 (52 reviews) · 2.3 mi away</div>
-          <p class="desc">ASE Certified. 10 years experience specializing in engine repair and diagnostics.</p>
+          <#if (p.accountStatus!"ACTIVE") == "ACTIVE">
+            <div class="availability"><span class="dot"></span>Accepting Customers</div>
+          <#else>
+            <div class="availability inactive"><span class="dot"></span>Unavailable</div>
+          </#if>
+          <h4>${p.name!}</h4>
+          <div class="specialty">
+            <#if p.specialties?has_content>${p.specialties?join(" · ")}<#else>${p.profession!"General Mechanic"}</#if>
+          </div>
+          <#if p.profession?has_content><div class="rating">${p.profession}</div></#if>
+          <p class="desc">
+            <#if p.certifications?has_content>Certified: ${p.certifications?join(", ")}<#else>No certifications listed yet.</#if>
+          </p>
           <div class="card-actions">
-            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
-            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
+            <a class="btn-view" href="/mechanics/${p.id?c}">View Profile &amp; Services</a>
           </div>
         </div>
       </div>
-
-      <div class="mechanic-card">
-        <img src="../images/maria.jpg" alt="Maria Lopez">
-        <div class="details">
-          <div class="availability"><span class="dot"></span>Available Now</div>
-          <h4>Maria Lopez</h4>
-          <div class="specialty">Brakes & Suspension</div>
-          <div class="rating">4.8 / 5.0 (41 reviews) · 3.1 mi away</div>
-          <p class="desc">Certified brake specialist with a focus on fast, reliable roadside fixes.</p>
-          <div class="card-actions">
-            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
-            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="mechanic-card">
-        <img src="../images/marcus.jpg" alt="Marcus White">
-        <div class="details">
-          <div class="availability"><span class="dot"></span>Available Now</div>
-          <h4>Marcus White</h4>
-          <div class="specialty">Electrical & Battery</div>
-          <div class="rating">4.7 / 5.0 (36 reviews) · 4.6 mi away</div>
-          <p class="desc">5 years helping drivers get back on the road with electrical and battery repairs.</p>
-          <div class="card-actions">
-            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
-            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="mechanic-card">
-        <img src="../images/Jordan.jpg" alt="Jordan Freeman">
-        <div class="details">
-          <div class="availability" style="color:#999;"><span class="dot" style="background:#ccc;"></span>Busy</div>
-          <h4>Jordan Freeman</h4>
-          <div class="specialty">Tires & Wheels</div>
-          <div class="rating">4.6 / 5.0 (29 reviews) · 5.8 mi away</div>
-          <p class="desc">Mobile tire specialist offering same-day flat repair and replacement.</p>
-          <div class="card-actions">
-            <button class="btn-view" onclick="location.href='mechanic-profile.html'">View Profile</button>
-            <button class="btn-request" onclick="location.href='request-help.html'">Request Help</button>
-          </div>
-        </div>
-      </div>
-
+      </#list>
     </div>
+    <#else>
+      <div class="empty-state">
+        <p>No mechanics match your search.</p>
+        <p><a href="/mechanics">Show all mechanics</a></p>
+      </div>
+    </#if>
+
 
   </div>
 
-  <script>
-    function filterChip(btn) {
-      document.querySelectorAll('.filter-chips button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      // No backend yet — sorting/filtering logic can be added later
-    }
-
-    function searchMechanics() {
-      // No backend yet — placeholder for search functionality
-      alert('Search functionality will be connected in a future milestone.');
-    }
-  </script>
 
 </body>
 </html>

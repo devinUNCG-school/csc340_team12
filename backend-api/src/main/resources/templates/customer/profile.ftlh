@@ -255,7 +255,7 @@
     <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
       <a href="dashboard.html">Dashboard</a>
-      <a href="mechanics.html">Find Mechanics</a>
+      <a href="/mechanics">Find Mechanics</a>
       <a href="history.html">My Requests</a>
       <a href="/customers/${customer.id?c}" class="profile-badge">${initials}</a>
     </div>
