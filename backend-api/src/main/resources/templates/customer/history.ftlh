@@ -82,30 +82,9 @@
     font-size: 14px;
     cursor: pointer;
     white-space: nowrap;
+    text-decoration: none;
   }
   .new-request-btn:hover { background: #d14e0a; }
-
-  /* Filter tabs */
-  .filter-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-  .filter-tabs button {
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    color: #555;
-  }
-  .filter-tabs button.active {
-    background: #10151c;
-    color: #fff;
-    border-color: #10151c;
-  }
 
   /* Request cards */
   .request-card {
@@ -134,6 +113,7 @@
     align-items: center;
     gap: 16px;
   }
+  .request-card form { display: inline; }
   .status-pill {
     padding: 6px 14px;
     border-radius: 20px;
@@ -141,14 +121,15 @@
     font-weight: 600;
     white-space: nowrap;
   }
+  .status-pending { background: #eef3fb; color: #1e3a5f; }
   .status-progress { background: #fff4e8; color: #e8590c; }
   .status-completed { background: #e8f8ee; color: #1e8449; }
   .status-cancelled { background: #fdeaea; color: #c0392b; }
 
-  .view-btn {
-    background: #10151c;
-    color: #fff;
-    border: none;
+  .cancel-btn {
+    background: #fff;
+    color: #c0392b;
+    border: 1px solid #c0392b;
     padding: 10px 20px;
     border-radius: 6px;
     font-weight: 600;
@@ -156,94 +137,88 @@
     font-size: 14px;
     white-space: nowrap;
   }
+  .freq-tag { color: #e8590c; font-weight: 600; }
+
+  .banner { border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-weight: 600; }
+  .banner.success { background: #e7f6ec; color: #1e6b3a; border: 1px solid #b7e1c4; }
+  .banner.error { background: #fdecea; color: #b42318; border: 1px solid #f5c2c0; }
+
+  .empty-state {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    color: #777;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .empty-state a { color: #e8590c; font-weight: 600; }
 </style>
 </head>
 <body>
+<#assign initials = (customer.name?has_content)?then(customer.name?trim[0]?upper_case, "?")>
 
   <nav>
-    <a href="../index.html" class="logo">Auto<span>Aid</span></a>
+    <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="mechanics.html">Find Mechanics</a>
-      <a href="history.html">My Requests</a>
-      <a href="profile.html" class="profile-badge">JD</a>
+      <a href="/mechanics">Find Mechanics</a>
+      <a href="/customers/${customer.id?c}/bookings">My Requests</a>
+      <a href="/customers/${customer.id?c}" class="profile-badge">${initials}</a>
     </div>
   </nav>
 
   <div class="page-wrap">
 
+    <#if success??><div class="banner success">${success}</div></#if>
+    <#if error??><div class="banner error">${error}</div></#if>
+
     <div class="page-header">
       <div>
         <h1>My Requests</h1>
-        <p>Track your current and past roadside assistance requests</p>
+        <p>Your booked services and recurring checkups</p>
       </div>
-      <button class="new-request-btn" onclick="location.href='request-help.html'">+ New Request</button>
+      <a class="new-request-btn" href="/customers/${customer.id?c}/bookings/new">+ Book a Service</a>
     </div>
 
-    <div class="filter-tabs">
-      <button class="active" onclick="filterRequests(this)">All</button>
-      <button onclick="filterRequests(this)">In Progress</button>
-      <button onclick="filterRequests(this)">Completed</button>
-      <button onclick="filterRequests(this)">Cancelled</button>
-    </div>
-
-    <div class="request-card">
-      <div class="info">
-        <h3>Battery Won't Start</h3>
-        <p>Matched with Jason Reyes</p>
-        <p>Requested Sep 20, 2026</p>
+    <#if bookings?has_content>
+      <#list bookings as b>
+        <#assign st = (b.status!"PENDING")?upper_case>
+        <div class="request-card">
+          <div class="info">
+            <h3>${(b.service.name)!"Service"}</h3>
+            <p>with ${(b.provider.name)!"a mechanic"}<#if (b.service.price)??> · $${b.service.price?string("0.00")}</#if></p>
+            <p>
+              <#if b.scheduledTime??>${dateFmt.format(b.scheduledTime)}<#else>No time set</#if>
+              · <span class="freq-tag">${frequencies[b.frequency!"ONE_TIME"]!"One-time service"}</span>
+            </p>
+            <#if b.issueDescription?has_content><p>"${b.issueDescription}"</p></#if>
+          </div>
+          <div class="right">
+            <#if st == "COMPLETED">
+              <span class="status-pill status-completed">Completed</span>
+            <#elseif st == "CANCELLED">
+              <span class="status-pill status-cancelled">Cancelled</span>
+            <#elseif st == "PENDING">
+              <span class="status-pill status-pending">Pending</span>
+            <#else>
+              <span class="status-pill status-progress">${st?replace("_", " ")?capitalize}</span>
+            </#if>
+            <#if st != "COMPLETED" && st != "CANCELLED">
+              <form action="/customers/${customer.id?c}/bookings/${b.id?c}/cancel" method="post"
+                    onsubmit="return confirm('Cancel this booking?');">
+                <button type="submit" class="cancel-btn">Cancel</button>
+              </form>
+            </#if>
+          </div>
+        </div>
+      </#list>
+    <#else>
+      <div class="empty-state">
+        <p>You haven't booked any services yet.</p>
+        <p><a href="/customers/${customer.id?c}/bookings/new">Book your first service</a></p>
       </div>
-      <div class="right">
-        <span class="status-pill status-progress">In Progress</span>
-        <button class="view-btn" onclick="location.href='request-status.html'">View Details</button>
-      </div>
-    </div>
-
-    <div class="request-card">
-      <div class="info">
-        <h3>Brake Pads Replacement</h3>
-        <p>Completed by Maria Lopez</p>
-        <p>Requested Aug 14, 2026</p>
-      </div>
-      <div class="right">
-        <span class="status-pill status-completed">Completed</span>
-        <button class="view-btn" onclick="location.href='request-status.html'">View Details</button>
-      </div>
-    </div>
-
-    <div class="request-card">
-      <div class="info">
-        <h3>Flat Tire on Highway</h3>
-        <p>Completed by Marcus White</p>
-        <p>Requested Jul 2, 2026</p>
-      </div>
-      <div class="right">
-        <span class="status-pill status-completed">Completed</span>
-        <button class="view-btn" onclick="location.href='request-status.html'">View Details</button>
-      </div>
-    </div>
-
-    <div class="request-card">
-      <div class="info">
-        <h3>Check Engine Light</h3>
-        <p>Cancelled by you</p>
-        <p>Requested Jun 10, 2026</p>
-      </div>
-      <div class="right">
-        <span class="status-pill status-cancelled">Cancelled</span>
-        <button class="view-btn" onclick="location.href='request-status.html'">View Details</button>
-      </div>
-    </div>
+    </#if>
 
   </div>
-
-  <script>
-    function filterRequests(btn) {
-      document.querySelectorAll('.filter-tabs button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-    }
-  </script>
 
 </body>
 </html>

@@ -28,6 +28,9 @@ public class Booking {
 
     private String status = "PENDING";
 
+    // ONE_TIME, MONTHLY, QUARTERLY, or BIANNUAL (recurring checkups)
+    private String frequency = "ONE_TIME";
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -53,6 +56,9 @@ public class Booking {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getFrequency() { return frequency; }
+    public void setFrequency(String frequency) { this.frequency = frequency; }
 
     public Customer getCustomer() { return customer; }
     public void setCustomer(Customer customer) { this.customer = customer; }

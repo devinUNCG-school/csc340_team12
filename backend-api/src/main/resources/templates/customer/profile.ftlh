@@ -254,9 +254,8 @@
   <nav>
     <a href="/" class="logo">Auto<span>Aid</span></a>
     <div class="nav-links">
-      <a href="dashboard.html">Dashboard</a>
       <a href="/mechanics">Find Mechanics</a>
-      <a href="history.html">My Requests</a>
+      <a href="/customers/${customer.id?c}/bookings">My Requests</a>
       <a href="/customers/${customer.id?c}" class="profile-badge">${initials}</a>
     </div>
   </nav>
@@ -288,6 +287,12 @@
           <p>
             Engine: ${customer.engineType!"—"} · Color: ${customer.vehicleColor!"—"}
           </p>
+        </div>
+        <div class="vehicle-actions">
+          <a class="save-btn" style="text-decoration:none; display:inline-block;"
+             href="/customers/${customer.id?c}/bookings/new">Book a Service</a>
+          <a class="save-btn" style="text-decoration:none; display:inline-block; background:#10151c;"
+             href="/customers/${customer.id?c}/bookings">My Requests</a>
         </div>
       </div>
     </div>
