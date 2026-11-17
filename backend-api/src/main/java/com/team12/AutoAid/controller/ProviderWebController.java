@@ -1,9 +1,9 @@
-package com.autoaid.controller;
+package com.team12.AutoAid.controller;
 
-import com.autoaid.model.Provider;
-import com.autoaid.model.ServiceOffering;
-import com.autoaid.service.ProviderService;
-import com.autoaid.service.ServiceOfferingService;
+import com.team12.AutoAid.model.Provider;
+import com.team12.AutoAid.model.ServiceOffering;
+import com.team12.AutoAid.service.ProviderService;
+import com.team12.AutoAid.service.ServiceOfferingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
