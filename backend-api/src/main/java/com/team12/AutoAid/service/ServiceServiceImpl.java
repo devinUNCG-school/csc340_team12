@@ -5,28 +5,20 @@ import com.team12.AutoAid.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Optional;
 
-// Fully qualify Spring's @Service annotation to prevent collision with your entity
 @org.springframework.stereotype.Service
-public class ServiceServiceImpl {
+public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Override
     public List<Service> findAllServices() {
         return serviceRepository.findAll();
     }
 
-    public Optional<Service> findServiceById(Long id) {
-        return serviceRepository.findById(id);
-    }
-
+    @Override
     public Service saveService(Service service) {
         return serviceRepository.save(service);
-    }
-
-    public void deleteService(Long id) {
-        serviceRepository.deleteById(id);
     }
 }
