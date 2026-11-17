@@ -1,7 +1,7 @@
 package com.team12.AutoAid.controller;
 
-import com.team12.AutoAid.model.Provider;
-import com.team12.AutoAid.model.ServiceOffering;
+import com.team12.AutoAid.entity.Provider;
+import com.team12.AutoAid.entity.ServiceOffering;
 import com.team12.AutoAid.service.ProviderService;
 import com.team12.AutoAid.service.ServiceOfferingService;
 import org.springframework.stereotype.Controller;
