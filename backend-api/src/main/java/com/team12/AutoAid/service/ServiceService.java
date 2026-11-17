@@ -4,6 +4,6 @@ import com.team12.AutoAid.entity.Service;
 import java.util.List;
 
 public interface ServiceService {
-    List<Service> findByProviderId(Long providerId);
-    Service save(Service service);
+    List<Service> findAllServices();
+    Service saveService(Service service);
 }
