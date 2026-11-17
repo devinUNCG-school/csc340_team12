@@ -54,8 +54,10 @@ public class ProviderWebController {
     // 4. Show form to add a new service offering
     @GetMapping("/{providerId}/services/new")
     public String showServiceForm(@PathVariable Long providerId, Model model) {
+        Provider provider = providerService.findById(providerId)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
         Service service = new Service();
-        service.setProviderId(providerId);
+        service.setProvider(provider);
         model.addAttribute("service", service);
         model.addAttribute("providerId", providerId);
         return "provider-service-form";
@@ -65,6 +67,6 @@ public class ProviderWebController {
     @PostMapping("/services/save")
     public String saveService(@ModelAttribute Service service) {
         serviceService.save(service);
-        return "redirect:/provider/dashboard/" + service.getProviderId();
+        return "redirect:/provider/dashboard/" + service.getProvider().getId();
     }
 }
