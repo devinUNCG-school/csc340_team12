@@ -20,7 +20,6 @@ public class ProviderWebController {
         this.serviceService = serviceService;
     }
 
-    // 1. View Provider Dashboard with live database data
     @GetMapping("/dashboard/{id}")
     public String viewDashboard(@PathVariable Long id, Model model) {
         Provider provider = providerService.findById(id)
@@ -31,7 +30,6 @@ public class ProviderWebController {
         return "provider-dashboard";
     }
 
-    // 2. Show form to create/edit provider profile
     @GetMapping("/profile/form")
     public String showProfileForm(@RequestParam(required = false) Long id, Model model) {
         if (id != null) {
@@ -44,14 +42,12 @@ public class ProviderWebController {
         return "provider-profile-form";
     }
 
-    // 3. Save provider profile and redirect
     @PostMapping("/profile/save")
     public String saveProfile(@ModelAttribute Provider provider) {
         Provider saved = providerService.save(provider);
         return "redirect:/provider/dashboard/" + saved.getId();
     }
 
-    // 4. Show form to add a new service offering
     @GetMapping("/{providerId}/services/new")
     public String showServiceForm(@PathVariable Long providerId, Model model) {
         Provider provider = providerService.findById(providerId)
@@ -63,7 +59,6 @@ public class ProviderWebController {
         return "provider-service-form";
     }
 
-    // 5. Save new service offering
     @PostMapping("/services/save")
     public String saveService(@ModelAttribute Service service) {
         serviceService.save(service);
