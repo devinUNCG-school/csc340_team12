@@ -55,7 +55,7 @@ public class CustomerPageController {
             customerService.updateCustomer(id, customer);
         } catch (ResponseStatusException e) {
             model.addAttribute("message", "Customer " + id + " was not found.");
-            return "shared/error";
+            return "error";
         }
         redirectAttributes.addFlashAttribute("success", "Profile updated.");
         return "redirect:/customers/" + id;
@@ -68,7 +68,7 @@ public class CustomerPageController {
             customerService.deleteCustomer(id);
         } catch (ResponseStatusException e) {
             model.addAttribute("message", "Customer " + id + " was not found.");
-            return "shared/error";
+            return "error";
         }
         redirectAttributes.addFlashAttribute("success", "Your account was deleted.");
         return "redirect:/";
@@ -81,7 +81,7 @@ public class CustomerPageController {
             return "customer/profile";
         } catch (ResponseStatusException e) {
             model.addAttribute("message", "Customer " + id + " was not found.");
-            return "shared/error";
+            return "error";
         }
     }
 }

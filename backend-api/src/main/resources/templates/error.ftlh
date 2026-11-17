@@ -19,6 +19,12 @@
 <body>
   <div class="wrap">
     <#assign code = status!500>
+    <#if message?? && !(status??)>
+      <#-- Shown by our own controllers, e.g. "Customer 99 was not found." -->
+      <div class="code">Oops</div>
+      <h1>Not found</h1>
+      <p>${message}</p>
+    <#else>
     <div class="code">${code?c}</div>
     <#if code == 404>
       <h1>Page not found</h1>
@@ -29,6 +35,7 @@
     <#else>
       <h1>Something went wrong</h1>
       <p>We hit an unexpected problem. Please try again in a moment.</p>
+    </#if>
     </#if>
     <a href="/">Home</a>
     <a href="/mechanics">Find Mechanics</a>
