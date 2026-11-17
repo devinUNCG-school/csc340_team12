@@ -1,9 +1,9 @@
 package com.team12.AutoAid.controller;
 
 import com.team12.AutoAid.entity.Provider;
-import com.team12.AutoAid.entity.ServiceOffering;
+import com.team12.AutoAid.entity.Service;
 import com.team12.AutoAid.service.ProviderService;
-import com.team12.AutoAid.service.ServiceOfferingService;
+import com.team12.AutoAid.service.ServiceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProviderWebController {
 
     private final ProviderService providerService;
-    private final ServiceOfferingService serviceOfferingService;
+    private final ServiceService serviceService;
 
-    public ProviderWebController(ProviderService providerService, ServiceOfferingService serviceOfferingService) {
+    public ProviderWebController(ProviderService providerService, ServiceService serviceService) {
         this.providerService = providerService;
-        this.serviceOfferingService = serviceOfferingService;
+        this.serviceService = serviceService;
     }
 
     // 1. View Provider Dashboard with live database data
@@ -27,7 +27,7 @@ public class ProviderWebController {
             .orElseThrow(() -> new RuntimeException("Provider not found with ID: " + id));
         
         model.addAttribute("provider", provider);
-        model.addAttribute("services", serviceOfferingService.findByProviderId(id));
+        model.addAttribute("services", serviceService.findByProviderId(id));
         return "provider-dashboard";
     }
 
@@ -54,7 +54,7 @@ public class ProviderWebController {
     // 4. Show form to add a new service offering
     @GetMapping("/{providerId}/services/new")
     public String showServiceForm(@PathVariable Long providerId, Model model) {
-        ServiceOffering service = new ServiceOffering();
+        Service service = new Service();
         service.setProviderId(providerId);
         model.addAttribute("service", service);
         model.addAttribute("providerId", providerId);
@@ -63,8 +63,8 @@ public class ProviderWebController {
 
     // 5. Save new service offering
     @PostMapping("/services/save")
-    public String saveService(@ModelAttribute ServiceOffering serviceOffering) {
-        serviceOfferingService.save(serviceOffering);
-        return "redirect:/provider/dashboard/" + serviceOffering.getProviderId();
+    public String saveService(@ModelAttribute Service service) {
+        serviceService.save(service);
+        return "redirect:/provider/dashboard/" + service.getProviderId();
     }
 }
