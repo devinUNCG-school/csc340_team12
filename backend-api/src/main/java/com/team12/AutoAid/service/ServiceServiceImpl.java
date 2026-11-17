@@ -2,25 +2,31 @@ package com.team12.AutoAid.service;
 
 import com.team12.AutoAid.entity.Service;
 import com.team12.AutoAid.repository.ServiceRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
+import java.util.Optional;
 
-@Service
-public class ServiceServiceImpl implements ServiceService {
+// Fully qualify Spring's @Service annotation to prevent collision with your entity
+@org.springframework.stereotype.Service
+public class ServiceServiceImpl {
 
-    private final ServiceRepository serviceRepository;
+    @Autowired
+    private ServiceRepository serviceRepository;
 
-    public ServiceServiceImpl(ServiceRepository serviceRepository) {
-        this.serviceRepository = serviceRepository;
+    public List<Service> findAllServices() {
+        return serviceRepository.findAll();
     }
 
-    @Override
-    public List<Service> findByProviderId(Long providerId) {
-        return serviceRepository.findByProviderId(providerId);
+    public Optional<Service> findServiceById(Long id) {
+        return serviceRepository.findById(id);
     }
 
-    @Override
-    public Service save(Service service) {
+    public Service saveService(Service service) {
         return serviceRepository.save(service);
+    }
+
+    public void deleteService(Long id) {
+        serviceRepository.deleteById(id);
     }
 }
