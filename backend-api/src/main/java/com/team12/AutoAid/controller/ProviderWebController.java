@@ -20,16 +20,18 @@ public class ProviderWebController {
         this.serviceService = serviceService;
     }
 
+    // 1. View Provider Dashboard with live database data
     @GetMapping("/dashboard/{id}")
     public String viewDashboard(@PathVariable Long id, Model model) {
         Provider provider = providerService.findById(id)
             .orElseThrow(() -> new RuntimeException("Provider not found with ID: " + id));
         
         model.addAttribute("provider", provider);
-        model.addAttribute("services", serviceService.findByProviderId(id));
+        model.addAttribute("services", serviceService.findAllServices()); 
         return "provider-dashboard";
     }
 
+    // 2. Show form to create/edit provider profile
     @GetMapping("/profile/form")
     public String showProfileForm(@RequestParam(required = false) Long id, Model model) {
         if (id != null) {
@@ -42,26 +44,30 @@ public class ProviderWebController {
         return "provider-profile-form";
     }
 
+    // 3. Save provider profile and redirect
     @PostMapping("/profile/save")
     public String saveProfile(@ModelAttribute Provider provider) {
         Provider saved = providerService.save(provider);
         return "redirect:/provider/dashboard/" + saved.getId();
     }
 
+    // 4. Show form to add a new service
     @GetMapping("/{providerId}/services/new")
     public String showServiceForm(@PathVariable Long providerId, Model model) {
         Provider provider = providerService.findById(providerId)
             .orElseThrow(() -> new RuntimeException("Provider not found"));
         Service service = new Service();
-        service.setProvider(provider);
+        // If your Service entity uses setProvider, keep it here:
+        // service.setProvider(provider);
         model.addAttribute("service", service);
         model.addAttribute("providerId", providerId);
         return "provider-service-form";
     }
 
+    // 5. Save new service
     @PostMapping("/services/save")
     public String saveService(@ModelAttribute Service service) {
-        serviceService.save(service);
-        return "redirect:/provider/dashboard/" + service.getProvider().getId();
+        serviceService.saveService(service);
+        return "redirect:/provider/dashboard/";
     }
 }
