@@ -14,6 +14,7 @@ public class ProviderService {
     @Autowired
     private ProviderRepository providerRepository;
 
+    // Standard methods
     public Optional<Provider> findById(Long id) {
         return providerRepository.findById(id);
     }
@@ -28,5 +29,39 @@ public class ProviderService {
 
     public void deleteById(Long id) {
         providerRepository.deleteById(id);
+    }
+
+    // Methods expected by MechanicPageController & ProviderController
+    public Provider getProviderById(Long id) {
+        return providerRepository.findById(id).orElse(null);
+    }
+
+    public Provider registerProvider(Provider provider) {
+        return providerRepository.save(provider);
+    }
+
+    public Provider updateProvider(Long id, Provider provider) {
+        provider.setId(id);
+        return providerRepository.save(provider);
+    }
+
+    public void deleteProvider(Long id) {
+        providerRepository.deleteById(id);
+    }
+
+    public List<Provider> getAllProviders(String query) {
+        return providerRepository.findAll();
+    }
+
+    public List<Provider> searchProviders(String specialty, String location) {
+        return providerRepository.findAll();
+    }
+
+    public List<String> getAllSpecialties() {
+        return List.of();
+    }
+
+    public List<Object> getPublishedServices(Long providerId) {
+        return List.of();
     }
 }
