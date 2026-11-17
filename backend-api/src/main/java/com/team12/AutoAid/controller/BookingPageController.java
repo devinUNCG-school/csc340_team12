@@ -101,7 +101,7 @@ public class BookingPageController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (ResponseStatusException e) {
             model.addAttribute("message", "Booking " + bookingId + " was not found for customer " + customerId + ".");
-            return "shared/error";
+            return "error";
         }
         return "redirect:/customers/" + customerId + "/bookings";
     }
@@ -128,6 +128,6 @@ public class BookingPageController {
 
     private String customerNotFound(Long customerId, Model model) {
         model.addAttribute("message", "Customer " + customerId + " was not found.");
-        return "shared/error";
+        return "error";
     }
 }

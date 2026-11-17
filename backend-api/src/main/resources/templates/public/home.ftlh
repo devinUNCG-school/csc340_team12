@@ -255,6 +255,10 @@
 
 <body>
 
+  <#if success??>
+    <div style="background:#e7f6ec;color:#1e6b3a;padding:12px 16px;text-align:center;font-weight:600;">${success}</div>
+  </#if>
+
   <nav>
     <div class="logo">Auto<span>Aid</span></div>
     <div class="nav-links">

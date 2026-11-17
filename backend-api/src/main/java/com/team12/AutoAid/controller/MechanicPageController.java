@@ -38,7 +38,7 @@ public class MechanicPageController {
         Optional<Provider> provider = providerService.getProviderById(id);
         if (provider.isEmpty()) {
             model.addAttribute("message", "Mechanic " + id + " was not found.");
-            return "shared/error";
+            return "error";
         }
         model.addAttribute("provider", provider.get());
         model.addAttribute("services", providerService.getPublishedServices(id));
